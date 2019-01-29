@@ -3,41 +3,20 @@
 #include "eg_containers.h"
 #include <vector>
 #include <functional>
+struct ScriptComponent;
+#include "ScriptComponent.h"
+struct NativeComponent;
+#include "NativeComponent.h"
 extern "C" {
 	#include "lua.h"
 }
+
 #undef main
-
-struct GameObject;
-
-struct Component {
-	const std::string file;
-	const std::string component_name;
-	GameObject *parent = nullptr;
-
-	Component(const std::string file, const std::string component_name, GameObject *parent);
-	Component(const Component& copy);
-	~Component();
-	
-	Component &operator=(const Component& move);
-
-	void Start();
-	void Update();
-	void Delete();
-private:
-	void LoadScript();
-	//Not yet implemented
-	void UpdateWatch();
-
-	static int copy_count;
-
-	friend int main(int argc, char* argv[]);
-	friend GameObject;
-};
 
 struct GameObject {
 	Vector2<float> position;
-	std::vector<Component> Components;
+	std::vector<ScriptComponent> ScriptComponents;
+	std::vector<NativeComponent> NativeComponents;
 
 	GameObject();
 	GameObject(const GameObject& copy);
@@ -53,7 +32,8 @@ struct GameObject {
 		return all;
 	}
 
-	friend Component;
+	friend ScriptComponent;
+	friend NativeComponent;
 
 private:
 	static std::vector<GameObject> all;
@@ -62,5 +42,4 @@ private:
 	friend int main(int argc, char* argv[]);
 };
 
-//Lua API
-int GameObject_lua_Get_Position(lua_State *L);
+int lua_GameObject_GetPosition(lua_State *L);

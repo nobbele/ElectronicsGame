@@ -9,6 +9,7 @@ extern "C" {
 }
 #include "GameObject.h"
 #include "eg_events.h"
+#include "Components.h"
 
 void nop(void*);
 
@@ -25,8 +26,10 @@ int eg_prand();
 extern lua_State *_L;
 
 const luaL_Reg Lua_API[] = {
-	{ "GameObject_Get_Positon", GameObject_lua_Get_Position },
-	{ "Subscribe_Event", lua_Subscribe_Event },
+	{ "GameObjectGetPositon", lua_GameObject_GetPosition },
+	{ "SubscribeEvent", lua_SubscribeEvent },
+	{ "GetNativeComponent", lua_GetNativeComponent },
+	{ "GetScriptComponent", lua_GetScriptComponent },
 };
 
 template<typename T, int sz>

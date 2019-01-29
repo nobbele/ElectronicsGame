@@ -1,6 +1,7 @@
-function Test_Start (object)
+function ScriptTest_Start (object)
+	print "From Lua!"
 end
-function Test_Update (object)
+function ScriptTest_Update (object)
 end
-function Test_Delete (object)
+function ScriptTest_Delete (object)
 end

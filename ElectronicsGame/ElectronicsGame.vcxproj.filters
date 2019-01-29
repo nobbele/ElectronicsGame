@@ -37,6 +37,15 @@
     <ClCompile Include="extensions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NativeComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game_main.h">
@@ -55,6 +64,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="extensions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NativeComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="internal_Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

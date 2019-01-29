@@ -18,7 +18,7 @@ namespace eg_events {
 	}
 }
 
-int lua_Subscribe_Event(lua_State *L)
+int lua_SubscribeEvent(lua_State *L)
 {
 	const SDL_EventType type = (SDL_EventType)lua_tointeger(L, 1);
 	return 0;

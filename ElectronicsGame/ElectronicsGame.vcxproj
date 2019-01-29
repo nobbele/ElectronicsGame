@@ -170,6 +170,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="NativeComponent.cpp" />
+    <ClCompile Include="ScriptComponent.cpp" />
     <ClCompile Include="eg_events.cpp" />
     <ClCompile Include="extensions.cpp" />
     <ClCompile Include="game_main.cpp" />
@@ -184,6 +187,10 @@
     <None Include="zlib1.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components.h" />
+    <ClInclude Include="internal_Component.h" />
+    <ClInclude Include="NativeComponent.h" />
+    <ClInclude Include="ScriptComponent.h" />
     <ClInclude Include="eg_containers.h" />
     <ClInclude Include="eg_events.h" />
     <ClInclude Include="extensions.h" />

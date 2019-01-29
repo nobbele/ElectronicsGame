@@ -35,4 +35,4 @@ namespace eg_events {
 	void unsubscribe_event(const EVENT_SUBSCRIPTION_CALLBACK& callback);
 }
 
-int lua_Subscribe_Event(lua_State *L);
+int lua_SubscribeEvent(lua_State *L);

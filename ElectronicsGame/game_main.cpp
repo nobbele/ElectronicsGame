@@ -6,6 +6,7 @@
 #include "eg_events.h"
 #include "GameObject.h"
 #include "main.h"
+#include "Components.h"
 
 #define DRAG_EXTENSION
 #include "extensions.h"
@@ -23,7 +24,17 @@ Vector2<float> offset;
 
 void game_start() {
 	player = GameObject::Create();
-	player->Components.emplace_back("Scripts/Player/Test.lua", "Test", player);
+	player->ScriptComponents.emplace_back("Scripts/Player/Test.lua", "ScriptTest", player);
+	player->NativeComponents.emplace_back(
+											[](GameObject* parent) {
+												printf("from C++!\n");
+												GetScriptComponent(parent, "ScriptTest")->Start();
+											},
+											std::function<NativeComponentFunction>(static_cast<NativeComponentFunction*>(0)),
+											std::function<NativeComponentFunction>(static_cast<NativeComponentFunction*>(0)),
+											"NativeTest",
+											player
+	);
 
 	eg_events::subscribe_event(SDL_EventType::SDL_KEYDOWN, [](const SDL_Event& event) {
 		if (event.key.keysym.sym == SDLK_RIGHT) {
