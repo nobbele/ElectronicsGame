@@ -1,17 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{6ef82403-293e-421e-823d-e4accf92cc74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{093bb125-afec-411a-882d-24f840f7602d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="src\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\Framework">
+      <UniqueIdentifier>{459dc091-4671-4df7-8a1f-7cfdab7c4724}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Framework\Header Files">
+      <UniqueIdentifier>{af5cd965-5a45-4272-aaae-0c096499511e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Framework\Source Files">
+      <UniqueIdentifier>{ec8fbb28-4018-4e54-8865-a3a7d4013fab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gl3w">
+      <UniqueIdentifier>{3a859ece-e2a8-4960-a6ec-2b99c4e2164a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -22,61 +40,82 @@
     <None Include="zlib1.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\source\game_main.cpp">
+      <Filter>src\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game_main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\framework\source\Component.cpp">
+      <Filter>src\Framework\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="eg_events.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\framework\source\eg_events.cpp">
+      <Filter>src\Framework\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\framework\source\extensions.cpp">
+      <Filter>src\Framework\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="extensions.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\framework\source\GameObject.cpp">
+      <Filter>src\Framework\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScriptComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\framework\source\main.cpp">
+      <Filter>src\Framework\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NativeComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\framework\source\NativeComponent.cpp">
+      <Filter>src\Framework\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\framework\source\ScriptComponent.cpp">
+      <Filter>src\Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gl3w\gl3w.c">
+      <Filter>src\gl3w</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\source\globals.cpp">
+      <Filter>src\Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\source\misc.cpp">
+      <Filter>src\Framework\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="game_main.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\Component.h">
+      <Filter>src\Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="eg_events.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\eg_containers.h">
+      <Filter>src\Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="eg_containers.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\eg_events.h">
+      <Filter>src\Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\eg_lua.h">
+      <Filter>src\Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\extensions.h">
+      <Filter>src\Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="extensions.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\game_main.h">
+      <Filter>src\Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScriptComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\GameObject.h">
+      <Filter>src\Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NativeComponent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\globals.h">
+      <Filter>src\Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="internal_Component.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\internal_Component.h">
+      <Filter>src\Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\framework\headers\misc.h">
+      <Filter>src\Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\headers\NativeComponent.h">
+      <Filter>src\Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\headers\ScriptComponent.h">
+      <Filter>src\Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\headers\internal_eg_inits.h">
+      <Filter>src\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\headers\internal_eg_glfunctions.h">
+      <Filter>src\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
