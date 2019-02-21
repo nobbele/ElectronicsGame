@@ -4,10 +4,10 @@
 #include "ScriptComponent.h"
 
 #define FOREACH_COMPONENT(obj, func) {\
-	for(ScriptComponent &comp : obj ## ->ScriptComponents) {\
+	for(ScriptComponent &comp : (obj)->ScriptComponents) {\
 		func;\
 	}\
-	for(NativeComponent &comp : obj ## ->NativeComponents) {\
+	for(NativeComponent &comp : (obj)->NativeComponents) {\
 		func;\
 	}\
 }

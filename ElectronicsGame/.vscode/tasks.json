@@ -1,0 +1,38 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Game (clang-cl)",
+            "type": "shell",
+            "args": [
+                "-Wno-pragma-pack",
+
+                "-Ilibs/lua/include",
+                "-Ilibs/gl3w/include",
+                "-Ilibs/sdl/include",
+                "-Ilibs/sdl_ttf/include",
+
+                "libs/lua/lua53.lib",
+                "libs/sdl/lib/x64/sdl2.lib",
+                "libs/sdl_ttf/lib/x64/sdl2_ttf.lib",
+                "${workspaceFolder}/src/gl3w/*.c",
+
+                "-I${workspaceFolder}/src/framework/include",
+
+                "${workspaceFolder}/src/framework/*.cpp",
+                "${workspaceFolder}/src/game/*.cpp",
+
+                "-o${workspaceFolder}/bin/eg_game"
+            ],
+            "command": "clang-cl"
+        },
+        {
+            "label": "Run Game",
+            "type": "shell",
+            "command": "${workspaceFolder}/bin/eg_game.exe",
+            "dependsOn": "Build Game (clang-cl)"
+        }
+    ]
+}
