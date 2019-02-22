@@ -4,19 +4,15 @@
 #include <SDL.h>
 #include <stdio.h>
 
-struct gl_version { int major; int minor; };
-
-inline gl_version getOpenGLVersion()
-{
-	gl_version version;
-	SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &version.major);
-	SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &version.minor);
-	return version;
+inline void setOpenGLVersion(int major, int minor) {
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, major);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor);
 }
 
-inline void checkOpenGLVersionSupport()
+inline void checkOpenGLVersionSupport(int major, int minor)
 {
-	if (!gl3wIsSupported(3, 3)) {
+	if (!gl3wIsSupported(major, minor)) {
 		fprintf(stderr, "OpenGL 3.3 not supported\n");
 		getchar();
 		exit(-1);

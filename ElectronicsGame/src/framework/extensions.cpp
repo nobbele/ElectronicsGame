@@ -10,10 +10,10 @@ bool dragging = false;
 Uint32 drag_timer_callback(Uint32 interval, void* param) {
 	if (mdown && !dragging) {
 		dragging = true;
-		SDL_Event new_event(*static_cast<SDL_Event*>(param));
-		new_event.type = EG_EVENT_DRAG_BEGIN;
-		SDL_PushEvent(&new_event);
-		delete param;
+		SDL_Event *event = static_cast<SDL_Event*>(param);
+		event->type = EG_EVENT_DRAG_BEGIN;
+		SDL_PushEvent(event);
+		delete event;
 	}
 	return 0;
 }

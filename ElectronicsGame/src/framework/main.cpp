@@ -4,7 +4,6 @@
 #include <functional>
 #include <vector>
 #include <thread>
-#include <vector>
 #include <unordered_set>
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -59,8 +58,24 @@ void end(SDL_GLContext context, SDL_Window *window) {
 	SDL_DestroyWindow(window);
 }
 
+void glMessageCallback( GLenum source,
+                 	    GLenum type,
+               	 	    GLuint id,
+             	        GLenum severity,
+					    GLsizei length,
+					    const GLchar* message,
+					    const void* userParam )
+{
+  fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
+            type, severity, message );
+}
+
 int main(int argc, char* argv[]) {
 	initSDL();
+
+	setOpenGLVersion(3, 3);
+	printf("OpenGL Version 3.3\n");
 
 	window = CreateSDLWindow();
 
@@ -68,10 +83,14 @@ int main(int argc, char* argv[]) {
 	context = CreateGLContext(window);
 	
 	initGl3w();
-	
-	gl_version glVersion = getOpenGLVersion();
-	printf("OpenGL Version %d.%d\n", glVersion.major, glVersion.minor);
-	checkOpenGLVersionSupport();
+
+	// During init, enable debug output
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(glMessageCallback, 0);
+
+	glViewport(0, 0, 800, 600);
+
+	checkOpenGLVersionSupport(3,3);
 
 	SDL_AddTimer(1, fps_timer, nullptr);
 

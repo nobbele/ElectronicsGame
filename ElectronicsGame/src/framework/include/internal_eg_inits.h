@@ -5,7 +5,7 @@ extern "C" {
 #include <lua.h>
 }
 
-inline void initLua()
+void initLua()
 {
 	_L = luaL_newstate();
 
@@ -19,7 +19,7 @@ inline void initLua()
 		lua_register(_L, Lua_API[i].name, Lua_API[i].func);
 	}
 }
-inline void initSDL()
+void initSDL()
 {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
 		fprintf(stderr, "Error Initializing SDL %s\n", SDL_GetError());
@@ -27,7 +27,7 @@ inline void initSDL()
 		exit(-1);
 	}
 }
-inline void initGl3w()
+void initGl3w()
 {
 	int err;
 	if ((err = gl3wInit()) != GL3W_OK) {

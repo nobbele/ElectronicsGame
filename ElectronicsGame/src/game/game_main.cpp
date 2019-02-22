@@ -16,7 +16,7 @@ int speed = 15;
 GameObject *drag_object = nullptr;
 Vector2<float> offset;
 
-void game_start() {
+/*void game_start() {
 	player = GameObject::Create();
 	player->AddNewScriptComponent("Scripts/Player/Test.lua", "ScriptTest", player);
 	player->AddNewNativeComponent(
@@ -71,6 +71,72 @@ void game_start() {
 	eg_events::subscribe_event(EG_EVENT(EG_EVENT_DRAG_END), [&](const SDL_Event& event) {
 		drag_object = nullptr;
 	});
+}*/
+
+#include <Graphics/Shader.h>
+#include <Graphics/ShaderProgram.h>
+#include <Graphics/Texture.h>
+#include <IO/eg_io.h>
+#include <IO/eg_error.h>
+
+Texture *texture;
+ShaderProgram *shaderProgram;
+
+unsigned int VBO, VAO, EBO;
+
+GLint posOffsetLocation;
+
+void game_start() {
+	texture = new Texture("assets/apple.png");
+
+	char *vertex_source = readFile("shaders/apple.vs");
+	char *fragment_source = readFile("shaders/apple.fs");
+	Shader shader(vertex_source, fragment_source);
+	delete vertex_source;
+	delete fragment_source;
+
+	shaderProgram = new ShaderProgram(&shader);
+
+	posOffsetLocation = shaderProgram->GetUniformLocation("posOffset");
+	if(posOffsetLocation == -1) {
+		EG_ERROR(
+			fprintf(stderr, "Couldn't get posOffset uniform location")
+		);
+	}
+
+	float vertices[] = {
+        // positions    // colors           // texture coords
+         0.5f,  0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+         0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f,   1.0f, 1.0f, 0.0f,   1.0f, 0.0f 
+    };
+    unsigned int indices[] = {  
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+    };
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    // position attribute
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // texture coord attribute 
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(5 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 }
 
 void game_update() {
@@ -78,8 +144,20 @@ void game_update() {
 }
 
 void game_draw(SDL_GLContext context) {
-	//Need to figure out a way to draw player using OpenGL
+	texture->Bind();
+
+	shaderProgram->Use();
+
+	glUniform2f(posOffsetLocation, 0, 0);
+
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 void game_end() {
+	glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+	delete texture;
+	delete shaderProgram;
 	uninstall_drag_extension();
 }

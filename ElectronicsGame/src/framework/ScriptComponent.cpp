@@ -1,6 +1,7 @@
 #include "ScriptComponent.h"
 
 #include "eg_lua.h"
+#include "IO/eg_error.h"
 #include <sstream>
 #include <sys/stat.h>
 
@@ -73,7 +74,7 @@ void ScriptComponent::Call(const std::string &name)
 void ScriptComponent::LoadScript()
 {
 	if (!cfileexists(file.c_str())) //File was not found
-		printf("script %s was not found\n", file.c_str());
+		EG_ERROR(printf("script %s was not found\n", file.c_str()));
 
 	luaL_dofile(_L, file.c_str());
 }

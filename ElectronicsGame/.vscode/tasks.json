@@ -4,15 +4,17 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build Game (clang-cl)",
+            "label": "Build Game",
             "type": "shell",
             "args": [
+                "-Z7",
                 "-Wno-pragma-pack",
 
                 "-Ilibs/lua/include",
                 "-Ilibs/gl3w/include",
                 "-Ilibs/sdl/include",
                 "-Ilibs/sdl_ttf/include",
+                "-Ilibs/stb",
 
                 "libs/lua/lua53.lib",
                 "libs/sdl/lib/x64/sdl2.lib",
@@ -22,6 +24,9 @@
                 "-I${workspaceFolder}/src/framework/include",
 
                 "${workspaceFolder}/src/framework/*.cpp",
+                "${workspaceFolder}/src/framework/Graphics/*.cpp",
+                "${workspaceFolder}/src/framework/IO/*.cpp",
+                
                 "${workspaceFolder}/src/game/*.cpp",
 
                 "-o${workspaceFolder}/bin/eg_game"
