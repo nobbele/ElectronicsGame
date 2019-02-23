@@ -55,23 +55,27 @@ void Sprite::DestroyStaticSpriteData() {
 }
 
 Sprite::Sprite(const ShaderProgram &shaderProgram, const Texture &texture, const Vector2<float> position, const Vector2<float> size)
-	: shaderProgram(shaderProgram), texture(texture), position(position), size(size)
+	: shaderProgram(shaderProgram), texture(texture), position(position), size(size), offset(0,0)
 {
 	if(!VBO || !EBO || !VAO) 
 		Sprite::InitializeStaticSpriteData();
 	this->positionUniform = shaderProgram.GetUniformLocation("position");
 	this->sizeUniform = shaderProgram.GetUniformLocation("size");
+    CalibrateOffset();
 }
 
-#include <stdio.h>
+void Sprite::CalibrateOffset() {
+    this->offset = egpToGL(Vector2<float>(0,0) + this->texture.size / 2);
+}
 
 void Sprite::Draw() const {
 	this->texture.Bind();
 	this->shaderProgram.Use();
 
+    Vector2<float> glPosition = egpToGL(this->position + this->texture.size / 2) - Sprite::offset;
     Vector2<float> glSize = this->size;
-    Vector2<float> fixedPosition = this->position;
-    Vector2<float> glPosition = egpToGL(this->position);
+    glPosition.x -= glSize.x;
+    glPosition.y += glSize.y;
 
 	glUniform2f(this->positionUniform, glPosition.x, glPosition.y);
 	glUniform2f(this->sizeUniform, glSize.x, glSize.y);

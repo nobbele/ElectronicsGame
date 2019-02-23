@@ -105,7 +105,7 @@ void game_start() {
 
 	shaderProgram = ShaderProgram::NewFromFile("shaders/normal_sprite.vs", "shaders/normal_sprite.fs");
 
-	sprite = new Sprite(*shaderProgram, *banana_texture, {0, 0}, { 0.1f, 0.1f });
+	sprite = new Sprite(*shaderProgram, *banana_texture, {0, 0}, { 0.0f, 0.0f });
 }
 
 void game_update() {

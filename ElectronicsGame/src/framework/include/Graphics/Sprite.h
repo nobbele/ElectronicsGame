@@ -16,6 +16,8 @@ class Sprite {
 	static void InitializeStaticSpriteData();
 	static void DestroyStaticSpriteData();
 
+	Vector2<float> offset;
+
 	const ShaderProgram &shaderProgram;
 	const Texture &texture;
 
@@ -26,6 +28,8 @@ public:
 	Vector2<float> size;
 
 	Sprite(const ShaderProgram &shaderProgram, const Texture &texture, const Vector2<float> position, const Vector2<float> size);
+
+	void CalibrateOffset();
 
 	void Draw() const;
 };
