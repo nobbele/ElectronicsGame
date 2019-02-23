@@ -43,22 +43,22 @@ constexpr size_t cstrlen(const char *const str) {
 	return i;
 }
 
-void ScriptComponent::Start()
+void ScriptComponent::Start() const
 {
 	this->Call("Start");
 }
 
-void ScriptComponent::Update()
+void ScriptComponent::Update() const
 {
 	this->Call("Update");
 }
 
-void ScriptComponent::Delete()
+void ScriptComponent::Delete() const
 {
 	this->Call("Delete");
 }
 
-void ScriptComponent::Call(const std::string &name)
+void ScriptComponent::Call(const std::string &name) const
 {
 	const std::string func = this->component_name + "_" + name;
 	if (!lua_getglobal(_L, func.c_str())) {

@@ -71,6 +71,7 @@ void glMessageCallback( GLenum source,
             type, severity, message );
 }
 
+#undef main
 int main(int argc, char* argv[]) {
 	initSDL();
 
@@ -135,13 +136,14 @@ int main(int argc, char* argv[]) {
 			frame_count++;
 			last_current_time = current_time;
 
-			for (GameObject &obj : GameObject::GetAll()) {
-				for (ScriptComponent &comp : obj.ScriptComponents) {
-					comp.UpdateWatch();
-					comp.Update();
-				}
-				for (NativeComponent &comp : obj.NativeComponents) {
-					comp.Update();
+			for (GameObject &obj : GameObject::all) {
+				for(ComponentVariant compVariant : obj.GetComponentIterator()) {
+					std::visit([](auto &&comp) {
+						comp->Update();
+					}, compVariant);
+					if(std::holds_alternative<ScriptComponent*>(compVariant)) {
+						std::get<ScriptComponent*>(compVariant)->UpdateWatch();
+					}
 				}
 			}
 		}
@@ -158,7 +160,7 @@ int main(int argc, char* argv[]) {
 
 			game_draw(context);
 
-			std::cout << "FPS: " << fps << " Dt: " << delta_time << std::endl;
+			//std::cout << "FPS: " << fps << " Dt: " << delta_time << std::endl;
 
 			SDL_GL_SwapWindow(window);
 		}

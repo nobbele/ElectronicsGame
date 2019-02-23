@@ -4,6 +4,8 @@
 #include "misc.h"
 #include <vector>
 #include <functional>
+#include <utility>
+#include <variant>
 struct ScriptComponent;
 #include "ScriptComponent.h"
 struct NativeComponent;
@@ -12,16 +14,70 @@ extern "C" {
 	#include "lua.h"
 }
 
-#undef main
+template<
+	typename T1, 
+	typename T2,
+	typename T1Store = std::vector<T1>&,
+	typename T2Store = std::vector<T2>&
+>
+struct DoubleIterator {
+	using FirstType = T1;
+	using SecondType = T2;
+	T1Store first;
+	T2Store second;
+
+	uint64_t offset = 0;
+
+	DoubleIterator(T1Store first, T2Store second)
+		: first(first), second(second)
+	{
+
+	}
+	DoubleIterator(T1Store first, T2Store second, uint64_t offset) 
+		: DoubleIterator(first, second) 
+	{
+		this->offset = offset;
+	}
+
+	DoubleIterator begin() {
+		return DoubleIterator(first, second, 0);
+	}
+	DoubleIterator end() {
+		return DoubleIterator(first, second, first.size() + second.size() - 1);
+	}
+
+	DoubleIterator& operator++() {
+		this->offset++;
+		return *this;
+	}
+	bool operator!=(DoubleIterator const& other) const {
+		return offset != other.offset;
+	}
+	using VariantType = std::variant<FirstType*, SecondType*>;
+	VariantType operator*() {
+		if(offset < first.size())
+			return &first.at(offset);
+		else
+			return &second.at(offset);
+	}
+};
+
+using ComponentIterator = DoubleIterator<ScriptComponent, NativeComponent>;
+using ComponentVariant = ComponentIterator::VariantType;
 
 struct GameObject {
 	Vector2<float> position;
+
 	std::vector<ScriptComponent> ScriptComponents;
 	std::vector<NativeComponent> NativeComponents;
 
 	GameObject();
 	GameObject(const GameObject& copy);
 	~GameObject();
+
+	ComponentIterator GetComponentIterator() {
+		return ComponentIterator(ScriptComponents, NativeComponents);
+	}
 
 	NativeComponent &AddNativeComponent(NativeComponent &comp);
 	template <class... Args>
@@ -48,18 +104,13 @@ struct GameObject {
 	static void Reserve_add(size_t n);
 	static void Reserve_set(size_t n);
 
-	static inline std::vector<GameObject> &GetAll() {
-		return all;
-	}
-
 	friend ScriptComponent;
 	friend NativeComponent;
 
-private:
 	static std::vector<GameObject> all;
-	static int copy_count;
 
-	friend int main(int argc, char* argv[]);
+private:
+	static int copy_count;
 };
 
 int lua_GameObject_GetPosition(lua_State *L);

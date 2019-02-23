@@ -16,7 +16,7 @@ int speed = 15;
 GameObject *drag_object = nullptr;
 Vector2<float> offset;
 
-/*void game_start() {
+void game_start() {
 	player = GameObject::Create();
 	player->AddNewScriptComponent("Scripts/Player/Test.lua", "ScriptTest", player);
 	player->AddNewNativeComponent(
@@ -54,7 +54,7 @@ Vector2<float> offset;
 	});
 	install_drag_extension();
 	eg_events::subscribe_event(EG_EVENT(EG_EVENT_DRAG_BEGIN), [&](const SDL_Event& event) {
-		for (GameObject &obj : GameObject::GetAll()) {
+		for (GameObject &obj : GameObject::all) {
 			if (within_rectangle((float)event.motion.x, (float)event.motion.y, obj.position.x, obj.position.y, obj.position.x + 100, obj.position.y + 20)) {
 				drag_object = &obj;
 				offset = { obj.position.x - event.motion.x, obj.position.y - event.motion.y };
@@ -71,9 +71,21 @@ Vector2<float> offset;
 	eg_events::subscribe_event(EG_EVENT(EG_EVENT_DRAG_END), [&](const SDL_Event& event) {
 		drag_object = nullptr;
 	});
-}*/
+}
 
-#include <Graphics/Shader.h>
+void game_update() {
+
+}
+
+void game_draw(SDL_GLContext context) {
+
+}
+
+void game_end() {
+	delete player;
+}
+
+/*#include <Graphics/Shader.h>
 #include <Graphics/ShaderProgram.h>
 #include <Graphics/Texture.h>
 #include <IO/eg_io.h>
@@ -160,4 +172,4 @@ void game_end() {
 	delete texture;
 	delete shaderProgram;
 	uninstall_drag_extension();
-}
+}*/

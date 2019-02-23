@@ -1,22 +1,22 @@
 #include "NativeComponent.h"
 
-void NativeComponent::Start() 
+void NativeComponent::Start() const
 {
 	if(this->functions.Start)
 		this->functions.Start(parent);
 }
-void NativeComponent::Update() 
+void NativeComponent::Update() const
 {
 	if (this->functions.Update)
 		this->functions.Update(parent);
 }
-void NativeComponent::Delete() 
+void NativeComponent::Delete() const
 {
 	if (this->functions.Delete)
 		this->functions.Delete(parent);
 }
 
-void NativeComponent::Call(const std::string &name)
+void NativeComponent::Call(const std::string &name) const
 {
 	NativeComponentFunction *const func = this->functions.Other.at(name);
 	func(this->parent);

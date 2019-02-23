@@ -8,6 +8,7 @@
             "type": "shell",
             "args": [
                 "-Z7",
+                "-std:c++17",
                 "-Wno-pragma-pack",
 
                 "-Ilibs/lua/include",
