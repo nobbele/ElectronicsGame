@@ -2,11 +2,12 @@
 
 #include <stdio.h>
 #include <IO/eg_error.h>
+#include <IO/eg_io.h>
 
-ShaderProgram::ShaderProgram(Shader *shader) {
+ShaderProgram::ShaderProgram(Shader &shader) {
 	this->m_program = glCreateProgram();
-    glAttachShader(this->m_program, shader->vertexShader);
-    glAttachShader(this->m_program, shader->fragmentShader);
+    glAttachShader(this->m_program, shader.vertexShader);
+    glAttachShader(this->m_program, shader.fragmentShader);
     glLinkProgram(this->m_program);
     // check for linking errors
 	GLint success;
@@ -20,10 +21,25 @@ ShaderProgram::ShaderProgram(Shader *shader) {
     }
 }
 
-void ShaderProgram::Use() {
+ShaderProgram *ShaderProgram::NewFromFile(const char *vertex_file, const char *fragment_file) {
+    char *vertex_source = readFile(vertex_file);
+	char *fragment_source = readFile(fragment_file);
+	Shader shader(vertex_source, fragment_source);
+	delete vertex_source;
+	delete fragment_source;
+    return new ShaderProgram(shader);
+}
+
+void ShaderProgram::Use() const {
 	glUseProgram(this->m_program);
 }
 
-GLint ShaderProgram::GetUniformLocation(const char *name) {
-	return glGetUniformLocation(this->m_program, name);
+GLint ShaderProgram::GetUniformLocation(const char *name) const {
+    GLint location = glGetUniformLocation(this->m_program, name);
+    if(location == -1) {
+        EG_ERROR(
+			fprintf(stderr, "Couldn't get vertexPositions uniform location")
+		);
+    }
+	return location;
 }

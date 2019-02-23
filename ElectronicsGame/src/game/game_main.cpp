@@ -11,12 +11,12 @@
 #include "globals.h"
 
 GameObject *player;
-int speed = 15;
+float speed = 0.0004;
  
 GameObject *drag_object = nullptr;
-Vector2<float> offset;
+Vector2<float> offset(0,0);
 
-void game_start() {
+/*void game_start() {
 	player = GameObject::Create();
 	player->AddNewScriptComponent("Scripts/Player/Test.lua", "ScriptTest", player);
 	player->AddNewNativeComponent(
@@ -83,93 +83,55 @@ void game_draw(SDL_GLContext context) {
 
 void game_end() {
 	delete player;
-}
+}*/
 
-/*#include <Graphics/Shader.h>
+#include <Graphics/Shader.h>
 #include <Graphics/ShaderProgram.h>
 #include <Graphics/Texture.h>
+#include <Graphics/BufferObject.h>
 #include <IO/eg_io.h>
 #include <IO/eg_error.h>
+#include <Graphics/VertexArray.h>
+#include <Graphics/Sprite.h>
 
-Texture *texture;
+Texture *apple_texture, *banana_texture;
 ShaderProgram *shaderProgram;
 
-unsigned int VBO, VAO, EBO;
-
-GLint posOffsetLocation;
+Sprite *sprite;
 
 void game_start() {
-	texture = new Texture("assets/apple.png");
+	apple_texture = new Texture("assets/apple.png");
+	banana_texture = new Texture("assets/banana.png");
 
-	char *vertex_source = readFile("shaders/apple.vs");
-	char *fragment_source = readFile("shaders/apple.fs");
-	Shader shader(vertex_source, fragment_source);
-	delete vertex_source;
-	delete fragment_source;
+	shaderProgram = ShaderProgram::NewFromFile("shaders/normal_sprite.vs", "shaders/normal_sprite.fs");
 
-	shaderProgram = new ShaderProgram(&shader);
-
-	posOffsetLocation = shaderProgram->GetUniformLocation("posOffset");
-	if(posOffsetLocation == -1) {
-		EG_ERROR(
-			fprintf(stderr, "Couldn't get posOffset uniform location")
-		);
-	}
-
-	float vertices[] = {
-        // positions    // colors           // texture coords
-         0.5f,  0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-         0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   0.0f, 1.0f,
-        -0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
-        -0.5f,  0.5f,   1.0f, 1.0f, 0.0f,   1.0f, 0.0f 
-    };
-    unsigned int indices[] = {  
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
-    };
-
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    // position attribute
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // texture coord attribute 
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(5 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+	sprite = new Sprite(*shaderProgram, *banana_texture, {0, 0}, { 0.5f, 0.5f });
 }
 
 void game_update() {
-
+	eg_events::subscribe_event(SDL_EventType::SDL_KEYDOWN, [](const SDL_Event& event) {
+		if (event.key.keysym.sym == SDLK_RIGHT) {
+			sprite->position.x += speed;
+		} else if (event.key.keysym.sym == SDLK_LEFT) {
+			sprite->position.x -= speed;
+		}
+		else if (event.key.keysym.sym == SDLK_UP) {
+			sprite->position.y -= speed;
+		}
+		else if (event.key.keysym.sym == SDLK_DOWN) {
+			sprite->position.y += speed;
+		}
+	});
+	printf("x: %f, y: %f\n", sprite->position.x, sprite->position.y);
 }
 
 void game_draw(SDL_GLContext context) {
-	texture->Bind();
-
-	shaderProgram->Use();
-
-	glUniform2f(posOffsetLocation, 0, 0);
-
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	sprite->Draw();
 }
 void game_end() {
-	glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-	delete texture;
+	delete banana_texture;
+	delete apple_texture;
 	delete shaderProgram;
+	delete sprite;
 	uninstall_drag_extension();
-}*/
+}

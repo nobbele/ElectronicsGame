@@ -9,9 +9,15 @@ int eg_prand();
 void dispatch_after_frame(std::function<void()> func);
 
 template<typename T, int sz>
-constexpr size_t sizeof_array(const T(&)[sz])
+constexpr size_t countof_array(const T(&)[sz])
 {
 	return sz;
+}
+
+template<typename T, int sz>
+constexpr size_t sizeof_array(const T(&)[sz])
+{
+	return sz * sizeof(T);
 }
 
 template<typename T>

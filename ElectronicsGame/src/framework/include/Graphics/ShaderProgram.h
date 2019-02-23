@@ -9,10 +9,11 @@ struct Shader;
 class ShaderProgram {
 	GLuint m_program;
 public:
-	ShaderProgram(Shader *shader);
+	ShaderProgram(Shader &shader);
+	static ShaderProgram *NewFromFile(const char *vertex_file, const char *fragment_file);
 
-	void Use();
-	GLint GetUniformLocation(const char *name);
+	void Use() const;
+	GLint GetUniformLocation(const char *name) const;
 };
 
 #endif

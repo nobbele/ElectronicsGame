@@ -15,7 +15,7 @@ void initLua()
 	luaopen_string(_L);
 	luaopen_math(_L);
 
-	for (unsigned int i = 0; i < sizeof_array(Lua_API); i++) {
+	for (unsigned int i = 0; i < countof_array(Lua_API); i++) {
 		lua_register(_L, Lua_API[i].name, Lua_API[i].func);
 	}
 }

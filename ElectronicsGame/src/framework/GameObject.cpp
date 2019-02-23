@@ -34,9 +34,9 @@ std::vector<GameObject> GameObject::all;
 int GameObject::copy_count = 0;
 
 GameObject::GameObject()
+	: position(0, 0)
 {
-	position.x = 0;
-	position.y = 0;
+	
 }
 
 GameObject::GameObject(const GameObject &copy) :

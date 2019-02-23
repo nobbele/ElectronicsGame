@@ -5,7 +5,9 @@
 #include <stb_image.h>
 #include <IO/eg_error.h>
 
-Texture::Texture(const char *path) {
+Texture::Texture(const char *path) 
+	: size(0, 0)
+{
 	glGenTextures(1, &this->m_texture);
 	glBindTexture(GL_TEXTURE_2D, this->m_texture);
 	// set the texture wrapping parameters
@@ -15,8 +17,8 @@ Texture::Texture(const char *path) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// load image, create texture and generate mipmaps
-	int width, height, nrChannels;
-	unsigned char *data = stbi_load(path, &width, &height, &nrChannels, STBI_rgb_alpha);
+	int nrChannels;
+	unsigned char *data = stbi_load(path, &this->size.x, &this->size.y, &nrChannels, STBI_rgb_alpha);
 
 	if (!data) {
 		EG_ERROR(
@@ -26,11 +28,11 @@ Texture::Texture(const char *path) {
 		);
 	}
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->size.x, this->size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 	stbi_image_free(data);
 }
 
-void Texture::Bind() {
+void Texture::Bind() const {
 	glBindTexture(GL_TEXTURE_2D, this->m_texture);
 }

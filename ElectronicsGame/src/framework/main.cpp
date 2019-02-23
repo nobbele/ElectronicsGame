@@ -89,8 +89,6 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(glMessageCallback, 0);
 
-	glViewport(0, 0, 800, 600);
-
 	checkOpenGLVersionSupport(3,3);
 
 	SDL_AddTimer(1, fps_timer, nullptr);
@@ -137,13 +135,12 @@ int main(int argc, char* argv[]) {
 			last_current_time = current_time;
 
 			for (GameObject &obj : GameObject::all) {
-				for(ComponentVariant compVariant : obj.GetComponentIterator()) {
-					std::visit([](auto &&comp) {
-						comp->Update();
-					}, compVariant);
-					if(std::holds_alternative<ScriptComponent*>(compVariant)) {
-						std::get<ScriptComponent*>(compVariant)->UpdateWatch();
-					}
+				for (ScriptComponent &comp : obj.ScriptComponents) {
+					comp.UpdateWatch();
+					comp.Update();
+				}
+				for (NativeComponent &comp : obj.NativeComponents) {
+					comp.Update();
 				}
 			}
 		}
