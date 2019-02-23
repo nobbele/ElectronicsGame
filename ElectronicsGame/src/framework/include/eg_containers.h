@@ -23,9 +23,16 @@ struct Vector2 {
 	Vector2<T> operator/(const OT& other) const {
 		return Vector2<T>(this->x / other, this->y / other);
 	}
+	template<typename OT>
+	Vector2<T> operator/(const Vector2<OT>& other) const {
+		return Vector2<T>(this->x / other.x, this->y / other.y);
+	}
 
 	Vector2<T> operator-(const T& other) const {
 		return Vector2<T>(this->x - other, this->y - other);
+	}
+	Vector2<T> operator-(const Vector2<T>& other) const {
+		return Vector2<T>(this->x - other.x, this->y - other.y);
 	}
 	
 	Vector2<T> operator+(const T& other) const {

@@ -3,13 +3,15 @@
 #include "eg_containers.h"
 #include <SDL.h>
 
-extern bool running;
-extern double delta_time;
-extern unsigned int fps;
-extern unsigned long int frame_count;
-extern bool vsync;
+struct globals {
+    static bool running;
+    static double delta_time;
+    static unsigned int fps;
+    static unsigned long int frame_count;
+    static bool vsync;
 
-extern Vector2<int> window_size;
+    static Vector2<int> window_size;
 
-extern SDL_Window *window;
-extern SDL_GLContext context;
+    static SDL_Window *window;
+    static SDL_GLContext context;
+};

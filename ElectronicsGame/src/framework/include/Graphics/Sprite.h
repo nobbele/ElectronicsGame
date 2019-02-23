@@ -19,7 +19,8 @@ class Sprite {
 	const ShaderProgram &shaderProgram;
 	const Texture &texture;
 
-	GLint vertexPositionsUniform;
+	GLint positionUniform;
+	GLint sizeUniform;
 public:
 	Vector2<float> position;
 	Vector2<float> size;

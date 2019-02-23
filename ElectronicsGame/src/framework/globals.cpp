@@ -1,12 +1,12 @@
 #include "globals.h"
 
-bool running = false;
-double delta_time = 0;
-unsigned int fps = 0;
-unsigned long int frame_count = 0;
-bool vsync = false;
+bool globals::running = false;
+double globals::delta_time = 0;
+unsigned int globals::fps = 0;
+unsigned long int globals::frame_count = 0;
+bool globals::vsync = false;
 
-Vector2<int> window_size = { 800, 600 };
+Vector2<int> globals::window_size = { 800, 600 };
 
-SDL_Window *window = nullptr;
-SDL_GLContext context = nullptr;
+SDL_Window *globals::window = nullptr;
+SDL_GLContext globals::context = nullptr;

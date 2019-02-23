@@ -12,10 +12,10 @@ VertexArray *Sprite::VAO;
 
 float Sprite::staticSpriteVertices[] = {
 		   // positions   // colors           // texture coords
-	0,     0.0f,  0.0f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f, // top right
-	1,     0.0f, -1.0f,   0.0f, 1.0f, 0.0f,   0.0f, 1.0f, // bottom right
+	0,     1.0f,  1.0f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f, // top right
+	1,     1.0f, -1.0f,   0.0f, 1.0f, 0.0f,   0.0f, 1.0f, // bottom right
 	2,    -1.0f, -1.0f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f, // bottom left
-	3,    -1.0f,  0.0f,   1.0f, 1.0f, 0.0f,   1.0f, 0.0f  // top left
+	3,    -1.0f,  1.0f,   1.0f, 1.0f, 0.0f,   1.0f, 0.0f  // top left
 };
 unsigned int Sprite::staticSpriteIndices[] = {  
 	0, 1, 3, // first triangle
@@ -59,8 +59,11 @@ Sprite::Sprite(const ShaderProgram &shaderProgram, const Texture &texture, const
 {
 	if(!VBO || !EBO || !VAO) 
 		Sprite::InitializeStaticSpriteData();
-	this->vertexPositionsUniform = shaderProgram.GetUniformLocation("vertexPositions");
+	this->positionUniform = shaderProgram.GetUniformLocation("position");
+	this->sizeUniform = shaderProgram.GetUniformLocation("size");
 }
+
+#include <stdio.h>
 
 void Sprite::Draw() const {
 	this->texture.Bind();
@@ -68,16 +71,10 @@ void Sprite::Draw() const {
 
     Vector2<float> glSize = this->size;
     Vector2<float> fixedPosition = this->position;
-    Vector2<float> glPosition = egpToGL(fixedPosition);
+    Vector2<float> glPosition = egpToGL(this->position);
 
-	float positions[] = {
-		glPosition.x + glSize.x,    glPosition.y + glSize.y, // top right
-		glPosition.x + glSize.x,    glPosition.y,            // bottom right
-		glPosition.x,               glPosition.y,            // bottom left
-		glPosition.x,               glPosition.y + glSize.y  // top left
-	};
-
-	glUniform2fv(this->vertexPositionsUniform, 4, positions);
+	glUniform2f(this->positionUniform, glPosition.x, glPosition.y);
+	glUniform2f(this->sizeUniform, glSize.x, glSize.y);
 
 	Sprite::VAO->Bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

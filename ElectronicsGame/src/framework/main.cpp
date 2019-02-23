@@ -39,8 +39,8 @@ SDL_Window *CreateSDLWindow() {
 	SDL_Window *window = SDL_CreateWindow("ElectronicsGame",
 										  SDL_WINDOWPOS_UNDEFINED,
 										  SDL_WINDOWPOS_UNDEFINED,
-										  window_size.x, window_size.y,
-										  SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+										  globals::window_size.x, globals::window_size.y,
+										  SDL_WINDOW_OPENGL);
 	if (!window) {
 		fprintf(stderr, "Error Initializing Window %s\n", SDL_GetError());
 		getchar();
@@ -78,10 +78,10 @@ int main(int argc, char* argv[]) {
 	setOpenGLVersion(3, 3);
 	printf("OpenGL Version 3.3\n");
 
-	window = CreateSDLWindow();
+	globals::window = CreateSDLWindow();
 
 	SetGLAttributes();
-	context = CreateGLContext(window);
+	globals::context = CreateGLContext(globals::window);
 	
 	initGl3w();
 
@@ -100,14 +100,23 @@ int main(int argc, char* argv[]) {
 	Uint32 lastframe = SDL_GetTicks();
 	double last_current_time = 0;
 
-	running = true;
-	while (running) {
+	globals::running = true;
+	while (globals::running) {
 		/*Events*/
 		{
 			SDL_Event event;
 			while (SDL_PollEvent(&event)) {
+				if (event.type == SDL_WINDOWEVENT) {
+					switch (event.window.event) {
+						case SDL_WINDOWEVENT_RESIZED:
+						case SDL_WINDOWEVENT_SIZE_CHANGED: {
+							globals::window_size.x = event.window.data1;
+							globals::window_size.y = event.window.data2;
+						} break;
+					}
+				}
 				if (event.type == SDL_EventType::SDL_QUIT)
-					running = false;
+					globals::running = false;
 				for (eg_events::Subscription sub : eg_events::event_subscriptions) {
 					if (sub.type == event.type) {
 						sub.callback(event);
@@ -128,10 +137,10 @@ int main(int argc, char* argv[]) {
 		{
 			Uint32 current_time = SDL_GetTicks();
 
-			delta_time = (current_time - last_current_time) / 1000;
-			fps = (unsigned int)(1.0 / delta_time);
+			globals::delta_time = (current_time - last_current_time) / 1000;
+			globals::fps = (unsigned int)(1.0 / globals::delta_time);
 
-			frame_count++;
+			globals::frame_count++;
 			last_current_time = current_time;
 
 			for (GameObject &obj : GameObject::all) {
@@ -155,15 +164,15 @@ int main(int argc, char* argv[]) {
 			glClearColor(0, 0, 0, 0);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			game_draw(context);
+			game_draw(globals::context);
 
 			//std::cout << "FPS: " << fps << " Dt: " << delta_time << std::endl;
 
-			SDL_GL_SwapWindow(window);
+			SDL_GL_SwapWindow(globals::window);
 		}
 	}
 
-	end(context, window);
+	end(globals::context, globals::window);
 
 	return 0;
 }

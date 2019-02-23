@@ -11,7 +11,7 @@
 #include "globals.h"
 
 GameObject *player;
-float speed = 0.0004;
+float speed = 0.00005;
  
 GameObject *drag_object = nullptr;
 Vector2<float> offset(0,0);
@@ -105,7 +105,7 @@ void game_start() {
 
 	shaderProgram = ShaderProgram::NewFromFile("shaders/normal_sprite.vs", "shaders/normal_sprite.fs");
 
-	sprite = new Sprite(*shaderProgram, *banana_texture, {0, 0}, { 0.5f, 0.5f });
+	sprite = new Sprite(*shaderProgram, *banana_texture, {0, 0}, { 0.1f, 0.1f });
 }
 
 void game_update() {
@@ -122,7 +122,7 @@ void game_update() {
 			sprite->position.y += speed;
 		}
 	});
-	printf("x: %f, y: %f\n", sprite->position.x, sprite->position.y);
+	//printf("x: %f, y: %f\n", sprite->position.x, sprite->position.y);
 }
 
 void game_draw(SDL_GLContext context) {
