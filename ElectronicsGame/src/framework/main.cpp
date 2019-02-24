@@ -71,6 +71,14 @@ void glMessageCallback( GLenum source,
             type, severity, message );
 }
 
+SDL_TimerID fpsTimerId;
+
+Uint32 fpsTimerCallback(Uint32 interval, void* param) {
+	globals::fps = globals::frameCount;
+	globals::frameCount = 0;
+	return 1000;
+}
+
 #undef main
 int main(int argc, char* argv[]) {
 	initSDL();
@@ -99,6 +107,8 @@ int main(int argc, char* argv[]) {
 
 	Uint32 lastframe = SDL_GetTicks();
 	double last_current_time = 0;
+
+	fpsTimerId = SDL_AddTimer(1000, fpsTimerCallback, nullptr);
 
 	globals::running = true;
 	while (globals::running) {
@@ -137,10 +147,10 @@ int main(int argc, char* argv[]) {
 		{
 			Uint32 current_time = SDL_GetTicks();
 
-			globals::delta_time = (current_time - last_current_time) / 1000;
-			globals::fps = (unsigned int)(1.0 / globals::delta_time);
+			globals::deltaTime = (current_time - last_current_time) / 1000;
+			//globals::fps = (unsigned int)(1.0 / globals::deltaTime);
 
-			globals::frame_count++;
+			globals::frameCount++;
 			last_current_time = current_time;
 
 			for (GameObject &obj : GameObject::all) {
@@ -166,7 +176,7 @@ int main(int argc, char* argv[]) {
 
 			game_draw(globals::context);
 
-			//std::cout << "FPS: " << fps << " Dt: " << delta_time << std::endl;
+			std::cout << "FPS: " << globals::fps << " Dt: " << globals::deltaTime << std::endl;
 
 			SDL_GL_SwapWindow(globals::window);
 		}

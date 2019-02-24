@@ -5,9 +5,9 @@
 
 struct globals {
     static bool running;
-    static double delta_time;
+    static double deltaTime;
     static unsigned int fps;
-    static unsigned long int frame_count;
+    static unsigned long int frameCount;
     static bool vsync;
 
     static Vector2<int> window_size;

@@ -7,6 +7,8 @@
 #include <Graphics/Texture.h>
 #include <eg_containers.h>
 
+#define SPRITE_OPTIMIZE 0
+
 class Sprite {
 	static BufferObject *VBO, *EBO;
 	static VertexArray *VAO;
@@ -26,6 +28,10 @@ class Sprite {
 public:
 	Vector2<float> position;
 	Vector2<float> size;
+#if SPRITE_OPTIMIZE == 1
+	mutable Vector2<float> old_position;
+	mutable Vector2<float> old_size;
+#endif
 
 	Sprite(const ShaderProgram &shaderProgram, const Texture &texture, const Vector2<float> position, const Vector2<float> size);
 

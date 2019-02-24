@@ -55,7 +55,11 @@ void Sprite::DestroyStaticSpriteData() {
 }
 
 Sprite::Sprite(const ShaderProgram &shaderProgram, const Texture &texture, const Vector2<float> position, const Vector2<float> size)
-	: shaderProgram(shaderProgram), texture(texture), position(position), size(size), offset(0,0)
+	: shaderProgram(shaderProgram), texture(texture), position(position), size(size),
+#if SPRITE_OPTIMIZE == 1
+	  old_position(position + 1), old_size(size + 1),
+#endif
+	  offset(0,0)
 {
 	if(!VBO || !EBO || !VAO) 
 		Sprite::InitializeStaticSpriteData();
@@ -69,17 +73,25 @@ void Sprite::CalibrateOffset() {
 }
 
 void Sprite::Draw() const {
-	this->texture.Bind();
-	this->shaderProgram.Use();
+#if SPRITE_OPTIMIZE == 1
+	if(this->old_position != this->position || this->old_size != this->size) {
+		this->old_position = this->position;
+		this->old_size = this->size;
+#endif
+		this->texture.Bind();
+		this->shaderProgram.Use();
 
-    Vector2<float> glPosition = egpToGL(this->position + this->texture.size / 2) - Sprite::offset;
-    Vector2<float> glSize = this->size;
-    glPosition.x -= glSize.x;
-    glPosition.y += glSize.y;
+		Vector2<float> glPosition = egpToGL(this->position + this->texture.size / 2) - Sprite::offset;
+		Vector2<float> glSize = this->size;
+		glPosition.x -= glSize.x;
+		glPosition.y += glSize.y;
 
-	glUniform2f(this->positionUniform, glPosition.x, glPosition.y);
-	glUniform2f(this->sizeUniform, glSize.x, glSize.y);
+		glUniform2f(this->positionUniform, glPosition.x, glPosition.y);
+		glUniform2f(this->sizeUniform, glSize.x, glSize.y);
 
-	Sprite::VAO->Bind();
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		Sprite::VAO->Bind();
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+#if SPRITE_OPTIMIZE == 1
+	}
+#endif
 }
